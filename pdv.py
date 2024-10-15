@@ -25,10 +25,16 @@ def main(page:Page):
     
     menubar = MenuBar(
         expand=True,
+        style=MenuStyle(
+            alignment=alignment.top_left,
+            shape=BeveledRectangleBorder(radius=border_radius.all(0)),
+            padding=0
+        ),
         controls=[
             SubmenuButton(
                 Text('Produtos'),
-                width=100,style=ButtonStyle(
+                width=100,
+                style=ButtonStyle(
                     bgcolor=colors.GREY_500),
                 controls=[
                     SubmenuButton(
@@ -46,6 +52,7 @@ def main(page:Page):
                     )
                 ]
             )
+            
         ]
     )
     TopRow = Row([menubar])
