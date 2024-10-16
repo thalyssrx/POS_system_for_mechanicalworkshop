@@ -33,9 +33,8 @@ def main(page:Page):
         controls=[
             SubmenuButton(
                 Text('Produtos'),
-                width=100,
-                style=ButtonStyle(
-                    bgcolor=colors.GREY_500),
+                width=100,height=30,
+                
                 controls=[
                     SubmenuButton(
                         Text('Cadastro')
@@ -43,16 +42,19 @@ def main(page:Page):
                 ]
             ),
             SubmenuButton(
-                Text('cuuuu'),
-                width=100,style=ButtonStyle(
-                    bgcolor=colors.GREY_500),
+                Text('uuu'),
+                width=100,height=30,
+                
                 controls=[
                     SubmenuButton(
                         Text('Cadastro')
                     )
                 ]
+            ),
+            IconButton(
+                icon=icons.ABC_OUTLINED,
+                height=30
             )
-            
         ]
     )
     TopRow = Row([menubar])
