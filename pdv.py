@@ -1,28 +1,11 @@
 from flet import *
-
+from logscreen import *
 
 def main(page:Page):
     page.title = "teste"
     page.padding = 0
-    
-    a = Container(
-        margin=0,
-        padding=1,
-        alignment=alignment.center,
-        bgcolor=colors.GREY_600,
-        width=80,
-        height=40,
-        border_radius=0,
-        content= SubmenuButton(
-            content=Text('Produtos'),
-            controls=[
-                SubmenuButton(
-                    content=Text('a')
-                )
-                ]
-            )
-        )      
-    
+    page.window.maximized= True
+    page.window.resizable = False
     menubar = MenuBar(
         expand=True,
         style=MenuStyle(
@@ -57,8 +40,8 @@ def main(page:Page):
             )
         ]
     )
-    TopRow = Row([menubar])
-    
-    page.add(TopRow)
 
-app(main)
+    page.add(Row([menubar]))
+
+
+app(login)
