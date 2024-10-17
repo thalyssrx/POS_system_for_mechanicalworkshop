@@ -1,12 +1,12 @@
 from flet import *
-from logscreen import *
+from logscreen import login
 
 def main(page:Page):
     page.title = "teste"
     page.padding = 0
     page.window.maximized= True
     page.window.resizable = False
-    menubar = MenuBar(
+    menubar = Row([MenuBar(
         expand=True,
         style=MenuStyle(
             alignment=alignment.top_left,
@@ -39,9 +39,9 @@ def main(page:Page):
                 height=30
             )
         ]
-    )
+    )])
 
-    page.add(Row([menubar]))
+    page.add(menubar)
 
 
-app(login)
+app(main)
