@@ -1,47 +1,48 @@
-from flet import *
+from flet_multi_page import *
+import flet as ft
 from logscreen import login
 
-def main(page:Page):
+loginstart = subPage(target=login)
+def main(page:ft.Page):
     page.title = "teste"
     page.padding = 0
-    page.window.maximized= True
+    page.window.maximized= False
     page.window.resizable = False
-    menubar = Row([MenuBar(
-        expand=True,
-        style=MenuStyle(
-            alignment=alignment.top_left,
-            shape=BeveledRectangleBorder(radius=border_radius.all(0)),
-            padding=0
-        ),
+   
+    menubar = ft.Row([ft.MenuBar(
+        
+        style=ft.MenuStyle(
+            padding=1,alignment=ft.alignment.top_right),
         controls=[
-            SubmenuButton(
-                Text('Produtos'),
-                width=100,height=30,
-                
+            ft.SubmenuButton(
+                ft.Text('Produtos'),
                 controls=[
-                    SubmenuButton(
-                        Text('Cadastro')
+                    ft.SubmenuButton(
+                        ft.Text('Cadastro')
                     )
                 ]
             ),
-            SubmenuButton(
-                Text('uuu'),
-                width=100,height=30,
-                
+            ft.SubmenuButton(
+                ft.Text('uuu'),
                 controls=[
-                    SubmenuButton(
-                        Text('Cadastro')
+                    ft.SubmenuButton(
+                        ft.Text('Cadastro')
                     )
                 ]
             ),
-            IconButton(
-                icon=icons.ABC_OUTLINED,
-                height=30
+            ft.IconButton(
+                icon=ft.icons.ABC, height= 40
             )
         ]
-    )])
+    )
+    ],width=ft.Window.width,height=40)
 
-    page.add(menubar)
 
 
-app(main)
+    page.add(ft.ElevatedButton("start new page"))
+    page.update()
+
+
+if __name__ == "__main__":
+    loginstart.start()
+    ft.app(target=main)
