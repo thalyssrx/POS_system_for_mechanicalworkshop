@@ -6,7 +6,7 @@ loginstart = subPage(target=login)
 def main(page:ft.Page):
     page.title = "teste"
     page.padding = 0
-    page.window.maximized= False
+    page.window.maximized= True
     page.window.resizable = False
    
     menubar = ft.Row([ft.MenuBar(
@@ -39,7 +39,7 @@ def main(page:ft.Page):
 
 
 
-    page.add(ft.ElevatedButton("start new page"))
+    page.add(menubar)
     page.update()
 
 
