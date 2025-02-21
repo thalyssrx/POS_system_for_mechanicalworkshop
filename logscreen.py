@@ -22,8 +22,8 @@ def login(log:Page):
     
     Text_Inputs=Column(
         alignment=MainAxisAlignment.CENTER,width=190,height=105,controls=([
-            TextField('',width=200,focused_border_color=colors.BLACK,fill_color=colors.WHITE,label='Nome',label_style=TextStyle(color=colors.BLACK),cursor_color=colors.BLACK),
-            TextField('',width=200,focused_border_color=colors.BLACK,fill_color=colors.WHITE,label='Senha',label_style=TextStyle(color=colors.BLACK),cursor_color=colors.BLACK)
+            TextField('',width=200,focused_border_color=colors.BLACK,fill_color=colors.WHITE,label='Nome',label_style=TextStyle(color=colors.BLACK),cursor_color=colors.BLACK,color=colors.BLACK),
+            TextField('',width=200,focused_border_color=colors.BLACK,fill_color=colors.WHITE,label='Senha',label_style=TextStyle(color=colors.BLACK),cursor_color=colors.BLACK,color=colors.BLACK)
             ])
     )
     Row_Colums_Text = Row(spacing=0,controls=[
