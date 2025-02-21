@@ -157,16 +157,38 @@ def main(page:ft.Page):
 
       rowtablewlistview = ft.ListView([ft.Row([table()], scroll= ft.ScrollMode.ALWAYS)],expand=95)
 
-      produtosview = ft.Column(
-      controls=[
-      ft.Container(
-         expand=5,bgcolor='red'
-      ),ft.Text(
-         value="PRODUTOS",size=20,color=ft.Colors.BLACK,
-         weight=ft.FontWeight.W_600,expand=5,bgcolor='yellow'
-      ),rowtablewlistview
-      ,ft.Container(bgcolor='red',expand=5)],
-      spacing=0,expand=90)
+      produtosview = ft.Row(
+         spacing=0,
+         expand=True,
+         controls=[
+            ft.Container(bgcolor='white',expand=2),
+            ft.Column(
+               spacing=0,
+               expand=98,
+               controls=[
+                  ft.Container(
+                     expand=5,bgcolor='white'
+                  ),
+                  ft.Text(
+                     value="PRODUTOS",size=20,color=ft.Colors.BLACK,
+                     weight=ft.FontWeight.W_600,expand=5,bgcolor='yellow'
+                  ),
+                  ft.Container(
+                     expand=8,
+                     padding=ft.Padding(0,10,10,10),
+                     content=ft.SearchBar(
+                        bar_shape=ft.RoundedRectangleBorder(),
+                        bar_border_side=ft.BorderSide(20,'black',10),
+                        bar_bgcolor='white',
+                        bar_overlay_color='white',
+                        bar_text_style=ft.TextStyle(color='black'),
+                        divider_color='red')
+                     ),
+                  rowtablewlistview,
+                  ft.Container(bgcolor='white',expand=5)],
+               )
+         ]
+      )
    
       return produtosview
    def page_teste():
@@ -195,7 +217,7 @@ def main(page:ft.Page):
             view.controls.__delitem__(1)
             view.controls.append(page_teste())
       page.update()
-         
+
    page.on_route_change = route_change 
    
    view = ft.Row(controls=[sidebar(),page_inicio()],expand=True,spacing=0,alignment=ft.MainAxisAlignment.START)
@@ -203,4 +225,4 @@ def main(page:ft.Page):
     
 
 if __name__ == "__main__": 
-    ft.app(target=main,assets_dir='Assets',view=ft.AppView.WEB_BROWSER)
+    ft.app(target=main,assets_dir='Assets',view=ft.AppView.FLET_APP)
