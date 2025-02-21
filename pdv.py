@@ -225,4 +225,4 @@ def main(page:ft.Page):
     
 
 if __name__ == "__main__": 
-    ft.app(target=main,assets_dir='Assets',view=ft.AppView.FLET_APP)
+    ft.app(target=main,assets_dir='Assets',view=ft.AppView.WEB_BROWSER)
