@@ -3,10 +3,13 @@ import flet as ft
 from logscreen import login
 import mysql.connector
 
+
 loginwindow = subPage(target=login)
 
 database = mysql.connector.connect(host = 'localhost',user ='root',database ='pdv_oficina',password = 'Superindy11.')         
-databasecursor = database.cursor()
+databasecursor = database.cursor(buffered=True)
+
+
 
 if database.is_connected():
    print('banco de dados conectado')
@@ -103,6 +106,7 @@ def main(page:ft.Page):
          spacing=0,expand=90)
       return inicioview  
    def page_produtos():
+      
       def table():
          
          def onselectrow():
@@ -141,7 +145,7 @@ def main(page:ft.Page):
                      cells.append(cells[-1])
                rows.append(ft.DataRow(cells=cells,on_select_changed= onselectrow()))
             return rows
-         
+
          table = ft.DataTable(
             expand=100,
             columns=generate_columns(),
@@ -149,12 +153,73 @@ def main(page:ft.Page):
             data_row_max_height=48,
             border= ft.border.all(1,"black"),
             vertical_lines= ft.BorderSide(1,'black'),
-
-            )
+         )
          
          
          return table
 
+      def checkboxlocalizar():   
+         
+         def actualactivecheckbox():
+            global actualactivecheckbox
+            if Codigobarras.value == True:
+               actualactivecheckbox = "`Código de Barras`"
+            if Nome.value == True:
+               actualactivecheckbox = 'Descrição'
+            if Codigo.value == True:
+               actualactivecheckbox = 'Código'
+            return actualactivecheckbox
+
+         def checkboxlocalizar_onchange(e):
+            match e.control.label:
+               case 'Código de Barras':
+                  Nome.value = False
+                  Codigo.value = False
+                  
+               case 'Nome':
+                  Codigobarras.value = False
+                  Codigo.value = False
+                  
+               case 'Código':
+                  Codigobarras.value = False
+                  Nome.value = False
+                  
+
+            actualactivecheckbox()
+            page.update()
+         
+              
+         Codigobarras = ft.Checkbox(label='Código de Barras',on_change=checkboxlocalizar_onchange)
+         Nome = ft.Checkbox(label='Nome',on_change=checkboxlocalizar_onchange,value=True)
+         Codigo = ft.Checkbox(label='Código',on_change=checkboxlocalizar_onchange)
+
+         actualactivecheckbox()
+
+         CheckBoxsLocalizar = ft.Row(
+            spacing=0,
+            expand=True,
+            controls=[
+               Codigobarras,
+               Nome,
+               Codigo
+            ]
+         )
+         
+         return CheckBoxsLocalizar
+      
+      def querysearchbar(e):
+         
+         databasecursor = database.cursor(buffered=True)
+         query = (f"select * from produtos where {actualactivecheckbox} like '{e.control.value}'")
+         print(query)
+
+         databasecursor.execute(query)
+         result = databasecursor.fetchall()
+         for row in result:
+            print(row)
+         databasecursor.close()      
+      
+      
       rowtablewlistview = ft.ListView([ft.Row([table()], scroll= ft.ScrollMode.ALWAYS)],expand=95)
 
       produtosview = ft.Row(
@@ -166,31 +231,51 @@ def main(page:ft.Page):
                spacing=0,
                expand=98,
                controls=[
-                  ft.Container(
-                     expand=5,bgcolor='white'
-                  ),
+                  ft.Container(expand=5,bgcolor='white'),
                   ft.Text(
                      value="PRODUTOS",size=20,color=ft.Colors.BLACK,
-                     weight=ft.FontWeight.W_600,expand=5,bgcolor='yellow'
+                     weight=ft.FontWeight.W_600,expand=5,bgcolor='white'
                   ),
-                  ft.Container(
+                  ft.Row(
                      expand=8,
-                     padding=ft.Padding(0,10,10,10),
-                     content=ft.SearchBar(
-                        bar_shape=ft.RoundedRectangleBorder(),
-                        bar_border_side=ft.BorderSide(20,'black',10),
-                        bar_bgcolor='white',
-                        bar_overlay_color='white',
-                        bar_text_style=ft.TextStyle(color='black'),
-                        divider_color='red')
-                     ),
+                     spacing=0,
+                     controls=[
+                        ft.Container(
+                           expand=2,
+                           padding=ft.Padding(0,10,10,10),
+                           content=ft.SearchBar(
+                              bar_shape=ft.RoundedRectangleBorder(),
+                              bar_border_side=ft.BorderSide(20,'black',10),
+                              bar_bgcolor='white',
+                              bar_overlay_color='white',
+                              bar_text_style=ft.TextStyle(color='black'),
+                              divider_color='red',
+                              on_change   = querysearchbar
+                           )
+                        ),
+                        ft.Column(
+                           expand=2,
+                           spacing = 0,
+                           controls=[
+                              ft.Text(
+                                 color='black',
+                                 value ='Localizar por:',
+                                 ),
+                                 checkboxlocalizar()
+                              
+                           ]
+                        )
+                     ]
+                  ),
                   rowtablewlistview,
-                  ft.Container(bgcolor='white',expand=5)],
-               )
+                  ft.Container(bgcolor='white',expand=5)
+               ],
+            )
          ]
       )
    
       return produtosview
+   
    def page_teste():
       testeview = ft.Column(
          controls=[
@@ -204,6 +289,32 @@ def main(page:ft.Page):
       
       return testeview
    
+   def page_editproduct():
+      a = ft.Row(
+         expand=True,
+         spacing=0,
+         controls=[
+            ft.Column(
+               expand = 98,
+               spacing = 0,
+               controls=[
+                  ft.Container(
+                     expand=5,
+                     bgcolor='red'
+                  ),
+                  ft.TextField(
+
+                  ),
+                  ft.Container(
+                     expand=5,
+                     bgcolor='red'
+                  )     
+               ]
+            )
+            ]
+      )
+
+      return a
 
    def route_change(route):
       match page.route:
@@ -215,7 +326,7 @@ def main(page:ft.Page):
             view.controls.append(page_produtos())
          case "/teste":
             view.controls.__delitem__(1)
-            view.controls.append(page_teste())
+            view.controls.append(page_editproduct())
       page.update()
 
    page.on_route_change = route_change 
@@ -225,4 +336,4 @@ def main(page:ft.Page):
     
 
 if __name__ == "__main__": 
-    ft.app(target=main,assets_dir='Assets',view=ft.AppView.WEB_BROWSER)
+    ft.app(target=main,assets_dir='Assets',view=ft.AppView.FLET_APP)
