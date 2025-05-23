@@ -1,14 +1,12 @@
 from flet_multi_page import *
 import flet as ft
-from logscreen import login
-import mysql.connector
-from page_inicio import *
-from page_editproduct import *
-from page_teste import *
-from page_produtos import *
 from db_variables import *
 
-loginwindow = subPage(target=login)
+import pages.page_inicio
+import pages.page_produtos
+import pages.page_teste
+
+
 
 
 if database.is_connected():
@@ -87,19 +85,19 @@ def main(page:ft.Page):
       match page.route:
          case "/inicio":
                page.controls[0].controls.__delitem__(1)
-               page.controls[0].controls.append(page_init())
+               page.controls[0].controls.append(pages.page_inicio.page_init())
          case "/produtos":
             page.controls[0].controls.__delitem__(1)
-            page.controls[0].controls.append(produtosview(page))
+            page.controls[0].controls.append(pages.page_produtos.produtosview(page))
          case "/teste":
             page.controls[0].controls.__delitem__(1)
-            page.controls[0].controls.append(page_teste())
+            page.controls[0].controls.append(pages.page_teste.page_teste())
       page.update()
 
    page.on_route_change = route_change 
    
    page.add(ft.Row(
-      controls=[sidebar(),page_init()],
+      controls=[sidebar(),pages.page_inicio.page_init()],
       expand=True,
       spacing=0,
       alignment=ft.MainAxisAlignment.START)
