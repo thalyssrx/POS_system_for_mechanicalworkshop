@@ -7,7 +7,7 @@ def page_produtos(page:ft.Page):
    def searchbar():
       
       def searchbar_onchange(e):
-         page.controls[0].controls[1].controls[1].controls[3] = table(e.control.value)
+         produtosview.controls[1].controls[3] = table(e.control.value)
 
          page.update()
 
@@ -66,11 +66,25 @@ def page_produtos(page:ft.Page):
             Codigo
          ]
       )
-            
+
       return CheckBoxsLocalizar      
 
+   def datarow_onselect(e):
+      cellvalue = []
+      for cell in e.control.cells:
+         cellvalue.append(cell.content.value)
+      print(cellvalue)
+      return cellvalue
+
+   def outputinfos():
+      outputinfos = ft.Container(
+         bgcolor= 'red',
+         expand= 10
+      )
+      return outputinfos
+
    def table(searchbarentry = ''):
-      
+
       databasecursor = database.cursor(buffered=True)
       
       def generate_columns():
@@ -83,31 +97,51 @@ def page_produtos(page:ft.Page):
          
          return columns
 
-      def generate_rows():
-         if searchbarentry == '':
-            query = (f"select * from produtos")
-         else:
-            query = (f"select * from produtos where {actualactivecheckbox} like '{searchbarentry}'")
-         rows = []
-         databasecursor.execute(query)
-         query = databasecursor.fetchall()
-         for tuple in query:
-            cells = []
-            for cell in tuple:
-               cells.append(ft.DataCell(ft.Text(cell)))
-            rows.append(ft.DataRow(cells=cells))
-            
-         return rows
-
       table = ft.DataTable(
          expand=100,
+         bgcolor= ft.Colors.GREY_300,
          columns=generate_columns(),
-         rows=generate_rows(),
-         data_row_max_height=48,
+         rows=[],
+         data_row_min_height=24,
+         data_row_max_height=30,
          border= ft.border.all(1,"black"),
          vertical_lines= ft.BorderSide(1,'black'),
       )
-      
+
+      if searchbarentry == '':
+         query = (f"select * from produtos")
+      else:
+         operator = ''
+         if actualactivecheckbox == 'Descrição':
+            operatorcount =searchbarentry.count('%')
+            if operatorcount%2 == 0:
+               operator = '%'
+            else:
+               operator = ''
+         
+         query = (f"select * from produtos where {actualactivecheckbox} like '{searchbarentry}{operator}'")
+         print(query)
+      databasecursor.execute(query)
+      query = databasecursor.fetchall()
+      for tuple in query:
+         table.rows.append(ft.DataRow(color='white',on_select_changed=datarow_onselect,cells=[
+            ft.DataCell(ft.Text(tuple[0],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[1],color='red',weight='bold')),
+            ft.DataCell(ft.Text(f"R$ {tuple[2]}",color='red',weight='bold')),
+            ft.DataCell(ft.Text(f"R$ {tuple[3]}",color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[4],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[5],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[6],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[7],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[8],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[9],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[10],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[11],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[12],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[13],color='red',weight='bold')),
+            ft.DataCell(ft.Text(tuple[14],color='red',weight='bold'))
+         ]))
+
       rowtablewlistview = ft.ListView(
          controls=[ft.Row([table], 
          scroll= ft.ScrollMode.ALWAYS)],
@@ -156,7 +190,8 @@ def page_produtos(page:ft.Page):
                table(),
                ft.Container(bgcolor='white',expand=5)
             ],
-         )
+         ),
+         ft.Container(bgcolor='white',expand=2)
       ]
    )
 
