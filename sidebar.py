@@ -22,18 +22,31 @@ def sidebar(page):
                   match index:
                      case 0:
                         e.page.go("/inicio")
+                        
                      case 1:
                         e.page.go("/produtos")
+                        sidebar.controls[0].selected_index=1
                      case 2:
                         e.page.go("/teste")
-                  
-
+                        sidebar.controls[0].selected_index=2
+               
+               def selectedindex():
+                  match page.route:
+                     case "/":
+                        return 0
+                     case "/inicio":
+                        return 0
+                     case "/produtos":
+                        return 1
+                     case "/teste":
+                        return 2
+                      
                sidebar = ft.Column(
                   width=75,
                   controls=[
                   ft.NavigationRail(
                      bgcolor=ft.Colors.GREY_500,
-                     selected_index=0,
+                     selected_index=selectedindex(),
                      expand=True,
                      label_type=ft.NavigationRailLabelType.ALL,
                      group_alignment=-1.0,indicator_shape=ft.RoundedRectangleBorder(radius=0),
