@@ -23,27 +23,55 @@ def main(page:ft.Page):
    
 
    def route_change(route):
-      
+      page.views.clear()
+
       match page.route:
+         case "/":
+            page.go("/inicio")
          case "/inicio":
-               page.controls[0].controls.__delitem__(1)
-               page.controls[0].controls.append(page_init())
+            page.views.append(ft.View(
+               "/inicio",
+               [ft.Row(
+                  controls=[sidebar(page),page_init()],
+                  expand=True,
+                  spacing=0,
+                  alignment=ft.MainAxisAlignment.START)],
+               padding=0,
+               bgcolor=ft.Colors.WHITE
+            ))
          case "/produtos":
-            page.controls[0].controls.__delitem__(1)
-            page.controls[0].controls.append(page_produtos(page))
+            page.views.append(ft.View(
+               "/produtos",
+               [ft.Row(
+                  controls=[sidebar(page),page_produtos(page)],
+                  expand=True,
+                  spacing=0,
+                  alignment=ft.MainAxisAlignment.START)],
+               padding=0,
+               bgcolor=ft.Colors.WHITE
+            ))
          case "/teste":
-            page.controls[0].controls.__delitem__(1)
-            page.controls[0].controls.append(page_teste())
+            page.views.append(ft.View(
+               "/teste",
+               [ft.Row(
+                  controls=[sidebar(page),page_teste()],
+                  expand=True,
+                  spacing=0,
+                  alignment=ft.MainAxisAlignment.START)],
+               padding=0,
+               bgcolor=ft.Colors.WHITE
+            ))
       page.update()
+      
+   def view_pop(view):
+      page.views.pop()
+      top_view = page.views[-1]
+      page.go(top_view.route)
 
    page.on_route_change = route_change 
+   page.on_view_pop = view_pop
    
-   page.add(ft.Row(
-      controls=[sidebar(page),page_init()],
-      expand=True,
-      spacing=0,
-      alignment=ft.MainAxisAlignment.START)
-      )
+   page.go('/inicio')
     
 
 if __name__ == "__main__": 
