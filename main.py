@@ -1,17 +1,12 @@
 from flet_multi_page import *
 import flet as ft
-from db_variables import *
+
 
 from sidebar import sidebar
 from pages.page_inicio import page_init
 from pages.page_produtos import page_produtos
 from pages.page_teste import page_teste
 
-
-
-
-if database.is_connected():
-   print('banco de dados conectado')
 
 def main(page:ft.Page):
    page.title = "PDV"
